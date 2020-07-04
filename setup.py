@@ -7,6 +7,7 @@ setup(
     url="http://github.com/reverscore/rever-python-logger",
     license="MIT",
     description="Logger library used in Rever",
+    install_requires=open('requirements.txt').read().splitlines(),
     author="Luis Elizondo",
     author_email="noreply@reverscore.com",
     package_dir={'': 'src'},
