@@ -41,7 +41,7 @@ LOGGING_CONFIG = {
 
 class Logger:
 
-    def __init__(self, service_name, logger_name):
+    def __init__(self, logger_name, service_name):
         if ENVIRONMENT == 'dev' or ENVIRONMENT == 'test':
             LOGGING_CONFIG['loggers']['']['handlers'] = ['console']
 
