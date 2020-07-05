@@ -50,30 +50,25 @@ class Logger:
         logging.config.dictConfig(LOGGING_CONFIG)
         self.log = logging.getLogger(logger_name)
 
-    def build_metadata(self, data):
-        metadata = copy.deepcopy(data)
-        metadata['service'] = self.service_name
-        metadata['environment'] = self.environment
-
     def info(self, message, metadata=None):
         self.log.info(message, extra={
-                      'metadata': self.build_metadata(metadata)})
+                      'metadata': metadata, 'service': self.service_name, 'environment': self.environment})
 
     def warning(self, message, metadata=None):
-        self.log.warning(
-            message, extra={'metadata': self.build_metadata(metadata)})
+        self.log.warning(message, extra={
+                         'metadata': metadata, 'service': self.service_name, 'environment': self.environment})
 
     def error(self, message, metadata=None):
         self.log.error(message, extra={
-                       'metadata': self.build_metadata(metadata)})
+                       'metadata': metadata, 'service': self.service_name, 'environment': self.environment})
 
     def exception(self, message):
         self.log.error("Uncaught exception: %s", traceback.format_exc())
 
     def debug(self, message, metadata=None):
         self.log.debug(message, extra={
-                       'metadata': self.build_metadata(metadata)})
+                       'metadata': metadata, 'service': self.service_name, 'environment': self.environment})
 
     def critical(self, message, metadata=None):
         self.log.debug(message, extra={
-                       'metadata': self.build_metadata(metadata)})
+                       'metadata': metadata, 'service': self.service_name, 'environment': self.environment})
