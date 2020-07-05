@@ -1,3 +1,4 @@
+import copy
 import logging.config
 import traceback
 from pythonjsonlogger import jsonlogger
@@ -40,27 +41,39 @@ LOGGING_CONFIG = {
 
 class Logger:
 
-    def __init__(self, logger_name):
+    def __init__(self, service_name, logger_name):
         if ENVIRONMENT == 'dev' or ENVIRONMENT == 'test':
             LOGGING_CONFIG['loggers']['']['handlers'] = ['console']
 
+        self.service_name = service_name
+        self.environment = ENVIRONMENT
         logging.config.dictConfig(LOGGING_CONFIG)
         self.log = logging.getLogger(logger_name)
 
+    def build_metadata(self, data):
+        metadata = copy.deepcopy(data)
+        metadata['service'] = self.service_name
+        metadata['environment'] = self.environment
+
     def info(self, message, metadata=None):
-        self.log.info(message, extra={'metadata': metadata})
+        self.log.info(message, extra={
+                      'metadata': self.build_metadata(metadata)})
 
     def warning(self, message, metadata=None):
-        self.log.warning(message, extra={'metadata': metadata})
+        self.log.warning(
+            message, extra={'metadata': self.build_metadata(metadata)})
 
     def error(self, message, metadata=None):
-        self.log.error(message, extra={'metadata': metadata})
+        self.log.error(message, extra={
+                       'metadata': self.build_metadata(metadata)})
 
     def exception(self, message):
         self.log.error("Uncaught exception: %s", traceback.format_exc())
 
     def debug(self, message, metadata=None):
-        self.log.debug(message, extra={'metadata': metadata})
+        self.log.debug(message, extra={
+                       'metadata': self.build_metadata(metadata)})
 
     def critical(self, message, metadata=None):
-        self.log.debug(message, extra={'metadata': metadata})
+        self.log.debug(message, extra={
+                       'metadata': self.build_metadata(metadata)})

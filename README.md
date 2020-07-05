@@ -16,7 +16,7 @@ To import add:
 
 ```
 from rever_logger.logger import Logger
-log = Logger(__name__)
+log = Logger('service-reports', __name__)
 ```
 
 Then use all traditional methods to log:
