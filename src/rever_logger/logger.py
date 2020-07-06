@@ -11,7 +11,7 @@ LOGGING_CONFIG = {
     'disable_existing_loggers': True,  # this config overrides all other loggers
     'formatters': {
         'simple': {
-            'format': '%(asctime)s\t%(levelname)s -- %(processName)s %(filename)s:%(lineno)s -- %(message)s -- %(metadata)s -- %(exc_info)s'
+            'format': '%(asctime)s\t%(levelname)s -- %(processName)s %(filename)s:%(lineno)s -- %(message)s -- %(logId)s -- %(metadata)s -- %(exc_info)s'
         },
         'json': {
             'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
@@ -45,30 +45,42 @@ class Logger:
         if ENVIRONMENT == 'dev' or ENVIRONMENT == 'test':
             LOGGING_CONFIG['loggers']['']['handlers'] = ['console']
 
+        self.logId = None
         self.service_name = service_name
         self.environment = ENVIRONMENT
         logging.config.dictConfig(LOGGING_CONFIG)
         self.log = logging.getLogger(logger_name)
 
+    def setLogId(self, logId):
+        self.logId = logId
+
+    def buildExtra(self, metadata):
+        extra = {
+            'metadata': metadata,
+            'service': self.service_name,
+            'environment': self.environment,
+            'logId': None
+        }
+
+        if self.logId:
+            extra['logId'] = self.logId
+
+        return extra
+
     def info(self, message, metadata=None):
-        self.log.info(message, extra={
-                      'metadata': metadata, 'service': self.service_name, 'environment': self.environment})
+        self.log.info(message, extra=self.buildExtra(metadata))
 
     def warning(self, message, metadata=None):
-        self.log.warning(message, extra={
-                         'metadata': metadata, 'service': self.service_name, 'environment': self.environment})
+        self.log.warning(message, extra=self.buildExtra(metadata))
 
     def error(self, message, metadata=None):
-        self.log.error(message, extra={
-                       'metadata': metadata, 'service': self.service_name, 'environment': self.environment})
+        self.log.error(message, extra=self.buildExtra(metadata))
 
     def exception(self, message):
         self.log.error("Uncaught exception: %s", traceback.format_exc())
 
     def debug(self, message, metadata=None):
-        self.log.debug(message, extra={
-                       'metadata': metadata, 'service': self.service_name, 'environment': self.environment})
+        self.log.debug(message, extra=self.buildExtra(metadata))
 
     def critical(self, message, metadata=None):
-        self.log.debug(message, extra={
-                       'metadata': metadata, 'service': self.service_name, 'environment': self.environment})
+        self.log.debug(message, extra=self.buildExtra(metadata))
