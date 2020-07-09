@@ -15,9 +15,11 @@ Then install your dependencies
 To import add:
 
 ```
-from rever_logger.logger import Logger
-log = Logger('service-reports', __name__)
+from rever_logger.logger import logger
+log = logger(__name__, service_name="service-something")
 ```
+
+Make sure you inject the log variable to other classes and methods that are going to use it.
 
 Then use all traditional methods to log:
 
