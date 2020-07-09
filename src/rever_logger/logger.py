@@ -11,11 +11,11 @@ LOGGING_CONFIG = {
     'disable_existing_loggers': True,  # this config overrides all other loggers
     'formatters': {
         'simple': {
-            'format': '%(asctime)s\t%(levelname)s -- %(processName)s %(filename)s:%(lineno)s -- %(message)s -- %(logId)s -- %(metadata)s -- %(exc_info)s'
+            'format': '%(levelname)s [%(logId)s]: %(message)s -- %(metadata)s -- %(exc_info)s'
         },
         'json': {
             'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
-            'format': '%(asctime)s\t%(levelname)s -- %(processName)s %(filename)s:%(lineno)s -- %(message)s'
+            'format': '%(asctime)s\t%(levelname)s -- %(message)s'
         }
     },
     'handlers': {
@@ -59,11 +59,8 @@ class Logger:
             'metadata': metadata,
             'service': self.service_name,
             'environment': self.environment,
-            'logId': None
+            'logId': self.logId
         }
-
-        if self.logId:
-            extra['logId'] = self.logId
 
         return extra
 
@@ -77,11 +74,16 @@ class Logger:
         self.log.error(message, extra=self.buildExtra(metadata))
 
     def exception(self, message):
-        self.log.error("Uncaught exception: %s",
-                       traceback.format_exc(), extra=self.buildExtra(metadata={}))
+        self.log.error(message)
+        self.log.error("Uncaught exception: %s", traceback.format_exc())
 
     def debug(self, message, metadata=None):
         self.log.debug(message, extra=self.buildExtra(metadata))
 
     def critical(self, message, metadata=None):
         self.log.debug(message, extra=self.buildExtra(metadata))
+
+
+def logger(logger_name, service_name):
+    log = Logger(logger_name=logger_name, service_name=service_name)
+    return log
