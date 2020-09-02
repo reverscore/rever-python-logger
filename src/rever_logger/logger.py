@@ -54,6 +54,9 @@ class Logger:
     def setLogId(self, logId):
         self.logId = logId
 
+    def getLogId(self):
+        return self.logId
+
     def buildExtra(self, metadata):
         extra = {
             'metadata': metadata,
