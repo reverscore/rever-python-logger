@@ -77,7 +77,8 @@ class Logger:
         self.log.error(message, extra=self.buildExtra(metadata))
 
     def exception(self, message):
-        self.log.error(message)
+        if message:
+            self.log.error(message)
         self.log.error("Uncaught exception: %s", traceback.format_exc())
 
     def debug(self, message, metadata=None):
