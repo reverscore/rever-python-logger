@@ -57,36 +57,36 @@ class Logger:
     def getLogId(self):
         return self.logId
 
-    def buildExtra(self, metadata):
+    def buildExtra(self, metadata, level):
         extra = {
             'metadata': metadata,
             'service': self.service_name,
             'environment': self.environment,
             'logId': self.logId,
-            'level': self.log.levelname
+            'level': level
         }
 
         return extra
 
     def info(self, message, metadata=None):
-        self.log.info(message, extra=self.buildExtra(metadata))
+        self.log.info(message, extra=self.buildExtra(metadata, 'INFO'))
 
     def warning(self, message, metadata=None):
-        self.log.warning(message, extra=self.buildExtra(metadata))
+        self.log.warning(message, extra=self.buildExtra(metadata, 'WARNING'))
 
     def error(self, message, metadata=None):
-        self.log.error(message, extra=self.buildExtra(metadata))
+        self.log.error(message, extra=self.buildExtra(metadata, 'ERROR'))
 
     def exception(self, message):
         if message:
-            self.log.error(message)
-        self.log.error("Uncaught exception: %s", traceback.format_exc())
+            self.log.error(message, extra=self.buildExtra({}, 'ERROR'))
+        self.log.error("Uncaught exception: %s", traceback.format_exc(), extra=self.buildExtra({ 'message': message }, 'ERROR'))
 
     def debug(self, message, metadata=None):
-        self.log.debug(message, extra=self.buildExtra(metadata))
+        self.log.debug(message, extra=self.buildExtra(metadata, 'DEBUG'))
 
     def critical(self, message, metadata=None):
-        self.log.debug(message, extra=self.buildExtra(metadata))
+        self.log.debug(message, extra=self.buildExtra(metadata, 'CRITICAL'))
 
 
 def logger(logger_name, service_name):
