@@ -57,7 +57,7 @@ class Logger:
     def getLogId(self):
         return self.logId
 
-    def buildExtra(self, metadata, level):
+    def buildExtra(self, metadata, level='INFO'):
         extra = {
             'metadata': metadata,
             'service': self.service_name,
