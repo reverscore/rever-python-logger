@@ -62,7 +62,8 @@ class Logger:
             'metadata': metadata,
             'service': self.service_name,
             'environment': self.environment,
-            'logId': self.logId
+            'logId': self.logId,
+            'level': self.log.level
         }
 
         return extra
