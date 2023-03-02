@@ -45,7 +45,7 @@ class Logger:
         if ENVIRONMENT == 'dev' or ENVIRONMENT == 'test':
             LOGGING_CONFIG['loggers']['']['handlers'] = ['console']
 
-        self.logId = None
+        self.logId = 'UNSET'
         self.service_name = service_name
         self.environment = ENVIRONMENT
         logging.config.dictConfig(LOGGING_CONFIG)
