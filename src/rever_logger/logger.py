@@ -42,14 +42,15 @@ LOGGING_CONFIG = {
 class Logger:
 
     def __init__(self, logger_name, service_name):
+        self.logger_name = service_name + '.' + logger_name
         if ENVIRONMENT == 'dev' or ENVIRONMENT == 'test':
-            LOGGING_CONFIG['loggers']['']['handlers'] = ['console']
+           LOGGING_CONFIG['loggers'][self.logger_name] = { 'level': 'INFO', 'handlers': ['console'], 'propagate': False }
 
-        self.logId = 'UNSET'
+        self.logId = None
         self.service_name = service_name
         self.environment = ENVIRONMENT
         logging.config.dictConfig(LOGGING_CONFIG)
-        self.log = logging.getLogger(logger_name)
+        self.log = logging.getLogger(self.logger_name)
 
     def setLogId(self, logId):
         self.logId = logId
