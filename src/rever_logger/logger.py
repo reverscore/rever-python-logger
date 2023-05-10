@@ -1,4 +1,6 @@
-import ddtrace import patch; patch(logging=True)
+import ddtrace import patch;
+patch(logging=True)
+
 import copy
 import logging.config
 import traceback
