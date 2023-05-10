@@ -1,4 +1,4 @@
-import ddtrace import patch
+from ddtrace import patch
 patch(logging=True)
 
 import copy
