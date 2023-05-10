@@ -1,8 +1,10 @@
+import ddtrace import patch; patch(logging=True)
 import copy
 import logging.config
 import traceback
 from pythonjsonlogger import jsonlogger
 import os
+
 
 ENVIRONMENT = os.environ['ENVIRONMENT']
 
@@ -16,6 +18,11 @@ LOGGING_CONFIG = {
         'json': {
             'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
             'format': '%(asctime)s\t%(levelname)s -- %(message)s'
+        },
+        'dd': {
+            'format': '%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
+          '[dd.service=%(dd.service)s dd.env=%(dd.env)s dd.version=%(dd.version)s dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
+          '- %(message)s'
         }
     },
     'handlers': {
@@ -28,12 +35,17 @@ LOGGING_CONFIG = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'json'
+        },
+        'console_json_dd': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'dd'
         }
     },
     'loggers': {
         '': {
             'level': 'INFO',
-            'handlers': ['console_json']
+            'handlers': ['console_json_dd']
         }
     }
 }
