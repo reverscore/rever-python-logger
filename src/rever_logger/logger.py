@@ -47,7 +47,7 @@ LOGGING_CONFIG = {
     'loggers': {
         '': {
             'level': 'INFO',
-            'handlers': ['console_json_dd']
+            'handlers': ['console_json']
         }
     }
 }
