@@ -1,6 +1,3 @@
-from ddtrace import patch
-patch(logging=True)
-
 import copy
 import logging.config
 import traceback
@@ -15,41 +12,31 @@ LOGGING_CONFIG = {
     'disable_existing_loggers': True,  # this config overrides all other loggers
     'formatters': {
         'simple': {
-            'format': '%(levelname)s [%(logId)s]: %(message)s -- %(metadata)s -- %(exc_info)s'
+            'format': '%(levelname)s [%(logId)s]: %(message)s -- %(metadata)s -- %(exc_info)s',
         },
         'json': {
             'class': 'pythonjsonlogger.jsonlogger.JsonFormatter',
-            'format': '%(asctime)s\t%(levelname)s -- %(message)s'
+            'format': '%(asctime)s\t%(levelname)s -- %(message)s',
         },
-        'dd': {
-            'format': '%(asctime)s %(levelname)s [%(name)s] [%(filename)s:%(lineno)d] '
-          '[dd.service=%(dd.service)s dd.env=%(dd.env)s dd.version=%(dd.version)s dd.trace_id=%(dd.trace_id)s dd.span_id=%(dd.span_id)s] '
-          '- %(message)s'
-        }
     },
     'handlers': {
         'console': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'simple'
+            'formatter': 'simple',
         },
         'console_json': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
-            'formatter': 'json'
+            'formatter': 'json',
         },
-        'console_json_dd': {
-            'level': 'DEBUG',
-            'class': 'logging.StreamHandler',
-            'formatter': 'dd'
-        }
     },
     'loggers': {
         '': {
             'level': 'INFO',
             'handlers': ['console_json']
-        }
-    }
+        },
+    },
 }
 
 
@@ -95,7 +82,7 @@ class Logger:
     def exception(self, message):
         if message:
             self.log.error(message, extra=self.buildExtra({}, 'ERROR'))
-        self.log.error("Uncaught exception: %s", traceback.format_exc(), extra=self.buildExtra({ 'message': message }, 'ERROR'))
+        self.log.error('Uncaught exception: %s', traceback.format_exc(), extra=self.buildExtra({ 'message': message }, 'ERROR'))
 
     def debug(self, message, metadata=None):
         self.log.debug(message, extra=self.buildExtra(metadata, 'DEBUG'))
