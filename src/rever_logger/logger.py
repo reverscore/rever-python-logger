@@ -24,11 +24,13 @@ LOGGING_CONFIG = {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'simple',
+            'stream': 'ext://sys.stdout',
         },
         'console_json': {
             'level': 'DEBUG',
             'class': 'logging.StreamHandler',
             'formatter': 'json',
+            'stream': 'ext://sys.stdout',
         },
     },
     'loggers': {
